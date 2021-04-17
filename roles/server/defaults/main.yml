@@ -32,7 +32,8 @@ database_options:
   ambari_db_password: molecule
 
 ambari_properties:
-  - "server.startup.web.timeout=120"
-  - "server.jdbc.driver.path={{ lookup('vars', database + '_jdbc_location') }}"
+- "server.startup.web.timeout=120"
+- "server.jdbc.driver.path={{ lookup('vars', database + '_jdbc_location') }}"
+- "client.api.port={{ ambari_port }}"
 
 ...
