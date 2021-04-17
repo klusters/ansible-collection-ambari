@@ -5,6 +5,7 @@
   gather_facts: no
 
   pre_tasks:
+  - name: Install OpenJDK
     package:
       name: java-1.8.0-openjdk-devel
 
