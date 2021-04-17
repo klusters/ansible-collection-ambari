@@ -1,7 +1,11 @@
 ---
 
-- name: Converge
+- name: Gather facts
   hosts: all
+
+- name: Converge
+  hosts: ambari_server
+  gather_facts: no
 
   roles:
   - role: klusters.ambari.server

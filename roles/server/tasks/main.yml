@@ -18,58 +18,52 @@
     with_items: "{{ lookup('vars', database + '_packages') | join(',') }}"
 
 - block:
-  - name: Install {{ database }} required packages
-    package:
-      name: "{{ item }}"
-      update_cache: yes
-      state: present
-    with_items: "{{ lookup('vars', database + '_packages') | join(',') }}"
+  - name: Load the Ambari Server schema (postgres)
+    postgresql_db:
+      name: "{{ database_options.ambari_db_name }}"
+      maintenance_db: "{{ database_options.ambari_db_name }}"
+      login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
+      port: "{{ postgres_port }}"
+      login_user: "{{ database_options.ambari_db_username }}"
+      login_password: "{{ database_options.ambari_db_password }}"
+      state: restore
+      target: /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+    register: import_results
+  when: database == "postgres"
 
-  - block:
-    - name: Load the Ambari Server schema (postgres)
-      postgresql_db:
-        name: "{{ database_options.ambari_db_name }}"
-        maintenance_db: "{{ database_options.ambari_db_name }}"
-        login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
-        port: "{{ postgres_port }}"
-        login_user: "{{ database_options.ambari_db_username }}"
-        login_password: "{{ database_options.ambari_db_password }}"
-        state: restore
-        target: /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
-    when: database == "postgres"
+- block:
+  - name: Load the Ambari Server schema (mysql)
+    mysql_db:
+      name: "{{ database_options.ambari_db_name }}"
+      login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
+      login_port: "{{ mysql_port }}"
+      login_user: "{{ database_options.ambari_db_username }}"
+      login_password: "{{ database_options.ambari_db_password }}"
+      state: import
+      target: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
+    register: import_results
+    ignore_errors: true
 
-  - block:
-    - name: Load the Ambari Server schema (mysql)
-      mysql_db:
-        name: "{{ database_options.ambari_db_name }}"
-        login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
-        login_port: "{{ mysql_port }}"
-        login_user: "{{ database_options.ambari_db_username }}"
-        login_password: "{{ database_options.ambari_db_password }}"
-        state: import
-        target: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
-      register: import_results
-      ignore_errors: true
+  - name: Fail if the mysql schema could not be loaded
+    fail:
+      msg: Schema could not be loaded. Error is {{ import_results.msg }}!
+    when: import_results is failed and not import_results.msg is search("Table .* already exists")
 
-    - name: Fail if the mysql schema could not be loaded
-      fail:
-        msg: Schema could not be loaded. Error is {{ import_results.msg }}!
-      when: import_results is failed and not import_results.msg is search("Table .* already exists")
+  when: database == "mysql" or database == "mariadb"
 
-    when: database == "mysql" or database == "mariadb"
+- name: Configure the Ambari JDBC driver
+  shell: /usr/sbin/ambari-server setup --jdbc-db={{ database | regex_replace('mariadb', 'mysql') }} --jdbc-driver={{ lookup('vars', database + '_jdbc_location') }}
+  notify: Restart ambari-server
+  when: import_results.changed | bool
 
-  - name: Configure the Ambari JDBC driver
-    shell: /usr/sbin/ambari-server setup --jdbc-db={{ database | regex_replace('mariadb', 'mysql') }} --jdbc-driver={{ lookup('vars', database + '_jdbc_location') }}
-    notify: Restart ambari-server
-
-  - name: Set the Ambari Server database setup options
-    set_fact:
-      ambari_database_options: "--database={{ database | regex_replace('mariadb', 'mysql') }} \
-                                --databasehost={{ database_options.external_hostname|default(ansible_fqdn,true) }} \
-                                --databaseport={{ lookup('vars', database | regex_replace('mariadb', 'mysql') + '_port') }} \
-                                --databasename={{ database_options.ambari_db_name }} \
-                                --databaseusername={{ database_options.ambari_db_username }} \
-                                --databasepassword={{ database_options.ambari_db_password }}"
+- name: Set the Ambari Server database setup options
+  set_fact:
+    ambari_database_options: "--database={{ database | regex_replace('mariadb', 'mysql') }} \
+                              --databasehost={{ database_options.external_hostname|default(ansible_fqdn,true) }} \
+                              --databaseport={{ lookup('vars', database | regex_replace('mariadb', 'mysql') + '_port') }} \
+                              --databasename={{ database_options.ambari_db_name }} \
+                              --databaseusername={{ database_options.ambari_db_username }} \
+                              --databasepassword={{ database_options.ambari_db_password }}"
 
 - name: Set the Ambari Server Java setup option
   set_fact:
@@ -101,29 +95,12 @@
   include: logs.yml
   when: config_logs | bool
 
-- name: Create log directory
-  become: true
-  file: path={{ hdp_log_prefix }}/ambari-server state=directory
-
-- name: Configure ambari-server.log4j
-  become: true
-  lineinfile:
-    path: /etc/ambari-server/conf/log4j.properties
-    regexp: '^ambari.log.dir='
-    line: 'ambari.log.dir={{ hdp_log_prefix }}/ambari-server'
-  notify: Restart ambari-server
-
 - meta: flush_handlers
 
-- name: Make sure the ambari-server service is started
+- name: Make sure the ambari-server service is started and enabled
   service:
     name: ambari-server
     state: started
-
-- name: Make sure the ambari-server service is enabled
-  service:
-    name: ambari-server
     enabled: yes
-  ignore_errors: true
 
 ...
