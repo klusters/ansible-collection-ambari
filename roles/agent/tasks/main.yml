@@ -1,0 +1,31 @@
+---
+
+- name: Install ambari-agent
+  package:
+    name: ambari-agent
+    update_cache: yes
+    state: present
+  notify: Reload systemd
+
+- name: Configure ambari-server
+  lineinfile:
+    state: present
+    path: /etc/ambari-agent/conf/ambari-agent.ini
+    regexp: '^hostname='
+    line: 'hostname={{ ambari_server }}'
+  notify: Restart ambari-agent
+
+- name: Configure logs path if asked
+  include: logs.yml
+  when: config_logs | bool
+
+- name: Flush Handlers
+  meta: flush_handlers
+
+- name: Ensure ambari-agent is started and enabled
+  service:
+    name: ambari-agent
+    state: started
+    enabled: yes
+
+...

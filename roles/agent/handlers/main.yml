@@ -1,0 +1,13 @@
+---
+
+- name: Restart ambari-agent
+  service:
+    state: restarted
+    name: ambari-agent
+
+- name: Reload systemd
+  become: yes
+  systemd:
+    daemon_reload: yes
+
+...

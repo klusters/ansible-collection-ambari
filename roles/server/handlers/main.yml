@@ -1,0 +1,17 @@
+---
+
+- name: systemd daemon-reload
+  systemd:
+    daemon_reload: yes
+
+- name: Restart ambari-server
+  service:
+    name: ambari-server
+    state: restarted
+  notify: 'Wait Server'
+
+- name: Wait Server
+  wait_for:
+    port: '{{ ambari_port }}'
+    host: 0.0.0.0
+    delay: 1

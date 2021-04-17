@@ -1,0 +1,24 @@
+---
+
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+# lint: |
+#   yamllint roles
+#   ansible-lint roles
+
+platforms:
+- name: instance-server
+  image: ${MOLECULE_DISTRO:-centos:7}
+  volumes:
+  - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  privileged: yes
+  command: ${MOLECULE_COMMAND:-"/usr/sbin/init"}
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}

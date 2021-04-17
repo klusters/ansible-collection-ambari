@@ -1,0 +1,17 @@
+---
+
+- name: Create logs dir
+  become: yes
+  file:
+    path: '{{ base_logs_path }}/ambari-agent'
+    state: directory
+
+- name: Configure logs dir in ambari-agent.ini
+  become: yes
+  lineinfile:
+    path: /etc/ambari-agent/conf/ambari-agent.ini
+    regexp: '^logdir='
+    line: 'logdir={{ base_logs_path }}/ambari-agent'
+  notify: Restart ambari-agent
+
+...

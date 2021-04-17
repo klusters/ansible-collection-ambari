@@ -1,0 +1,19 @@
+---
+
+- name: Ensure {{ ambari_repo.reposdir | d('/etc/yum.repos.d') }} exist
+  become: yes
+  file:
+    name: "{{ ambari_repo.reposdir | d('/etc/yum.repos.d') }}"
+    state: directory
+
+- name: Add ambari yum repo
+  yum_repository:
+    name: '{{ ambari_repo.name }}'
+    description: '{{ ambari_repo.description }}'
+    file: '{{ ambari_repo.file }}'
+    baseurl: '{{ ambari_repo.baseurl }}'
+    gpgcheck: '{{ ambari_repo.gpgcheck | d(omit ) }}'
+    username: '{{ ambari_repo.username | d(omit ) }}'
+    password: '{{ ambari_repo.password | d(omit ) }}'
+
+...

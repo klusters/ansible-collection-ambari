@@ -1,0 +1,25 @@
+---
+
+ambari_server: localhost
+base_logs_path: /var/log
+
+config_logs: no
+
+database: postgres
+postgres_port: 5432
+postgres_jdbc_location: /usr/share/java/postgresql-jdbc.jar
+postgres_packages:
+  - postgresql
+  - python-psycopg2
+  - postgresql-jdbc
+
+ambari_properties:
+  - "server.startup.web.timeout=120"
+  - "server.jdbc.driver.path={{ lookup('vars', database + '_jdbc_location') }}"
+
+ambari_https: yes
+ambari_port: 8080
+
+ambari_cert: "/var/lib/ambari-server/keys/my.crt"
+ambari_pkey: "/var/lib/ambari-server/keys/my.key"
+ambari_password: ""
