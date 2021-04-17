@@ -72,6 +72,7 @@
 - name: Run Ambari Server setup
   shell: /usr/sbin/ambari-server setup -s {{ ambari_java_options|default("") }} {{ ambari_database_options|default("") }}
   notify: Restart ambari-server
+  when: import_results.changed | bool
 
 - name: Run Ambari Server setup security https
   shell: /usr/sbin/ambari-server setup-security \
