@@ -9,7 +9,8 @@ on:
       - 'molecule/agent/**'
       - '.github/workflows/agent.yml'
       - 'molecule/common/**'
-
+    tags-ignore:
+      - '*.*'
 jobs:
   molecule:
     runs-on: ubuntu-latest
