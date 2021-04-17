@@ -80,12 +80,12 @@
   notify: Restart ambari-server
 
 - name: Run Ambari Server setup security https
-  shell: /usr/sbin/ambari-server setup-security \ 
+  shell: /usr/sbin/ambari-server setup-security \
     --security-option=setup-https \
-    --api-ssl=true --api-ssl-port={{ ambari_port }} \ 
-    --import-cert-path={{ ambari_cert }} \ 
+    --api-ssl=true --api-ssl-port={{ ambari_port }} \
+    --import-cert-path={{ ambari_cert }} \
     --import-key-path={{ ambari_pkey }}  \
-    --pem-password={{ ambari_pkey_password }}  
+    --pem-password={{ ambari_pkey_password }}
   notify: Restart ambari-server
   when:  ambari_https | bool
 
@@ -94,7 +94,7 @@
     path: /etc/ambari-server/conf/ambari.properties
     state: present
     line: "{{ item }}"
-  with_items: "{{ ambari_properties }}"  
+  with_items: "{{ ambari_properties }}"
   notify: Restart ambari-server
 
 - name: Configure logs path if asked
