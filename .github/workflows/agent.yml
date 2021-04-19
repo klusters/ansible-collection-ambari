@@ -9,7 +9,7 @@ on:
     - 'molecule/agent/**'
     - '.github/workflows/agent.yml'
     - 'molecule/common/**'
-    - '!**/*.md'
+    - '!*.md'
 
     tags-ignore:
     - '*.*'
