@@ -1,5 +1,18 @@
----
+Server
+=========
 
+Install & Configure Ambari server
+
+Requirements
+------------
+
+YUM Repository with ambari-server package and dependencies reachable
+Tested on CentOS 7 & Ambari 2.7.4.0
+
+Role Variables
+--------------
+
+```yaml
 ambari_server: localhost
 
 java_path: '/usr/lib/jvm/java'
@@ -35,5 +48,30 @@ ambari_properties:
 - "server.startup.web.timeout=120"
 - "server.jdbc.driver.path={{ lookup('vars', database + '_jdbc_location') }}"
 - "client.api.port={{ ambari_port }}"
+```
 
-...
+Example Playbook
+----------------
+
+```yaml
+- hosts: localhost
+  connection: local
+  roles:
+  - role: klusters.ambari.server
+```
+To Do
+----------------
+
+ - [x] Configure Logs
+ - [x] Configure with MariaDB
+ - [x] Configure with Postgres
+ - [x] Test with MariaDB
+ - [ ] Test with Postgres
+ - [ ] Configure Ambari Server with LDAP auth
+ - [ ] Configure Ambari Server with HTTPS
+
+
+License
+-------
+
+MIT
