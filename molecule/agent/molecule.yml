@@ -11,7 +11,7 @@ lint: |
   ansible-lint roles/agent
 
 platforms:
-- name: agent
+- name: agent_agent
   image: ${MOLECULE_DISTRO:-centos:7}
   volumes:
   - /sys/fs/cgroup:/sys/fs/cgroup:ro

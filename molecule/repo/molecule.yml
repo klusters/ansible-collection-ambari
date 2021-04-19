@@ -11,7 +11,7 @@ lint: |
   ansible-lint roles/repo
 
 platforms:
-- name: repo
+- name: repo_repo
   image: ${MOLECULE_DISTRO:-centos:7}
 
 provisioner:

@@ -1,20 +1,18 @@
 Server
 =========
 
-Install & Configure Ambari server
+Configure Ambari Stacks and admin password
 
 Requirements
 ------------
 
-YUM Repository with ambari-server package and dependencies reachable
+YUM Repository with HDP packages and dependencies reachable
 Tested on CentOS 7 & Ambari 2.7.4.0
 
 Role Variables
 --------------
 
 ```yaml
-ambari_server: localhost
-
 java_path: '/usr/lib/jvm/java'
 
 ambari_https: no

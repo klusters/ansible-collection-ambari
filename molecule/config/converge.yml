@@ -8,8 +8,8 @@
   gather_facts: no
 
   tasks:
-  - name: Run server role
+  - name: Run config role
     include_role:
-      name: klusters.ambari.server
+      name: klusters.ambari.config
 
 ...

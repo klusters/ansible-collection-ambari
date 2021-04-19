@@ -11,20 +11,20 @@ lint: |
   ansible-lint roles
 
 platforms:
-- name: server_server
+- name: config_server
   image: ${MOLECULE_DISTRO:-centos:7}
   volumes:
   - /sys/fs/cgroup:/sys/fs/cgroup:ro
   privileged: yes
   command: ${MOLECULE_COMMAND:-"/usr/sbin/init"}
-  groups: ['ambari_server']
+  groups: ['ambari_server', 'ambari_agent']
   network_mode: bridge
   networks:
-  - name: molecule
+  - name: molecule_config
     links:
-    - server_mariadb:db
+    - config_mariadb:db
 
-- name: server_mariadb
+- name: config_mariadb
   image: mariadb:10.2
   env:
     MYSQL_ROOT_PASSWORD: molecule
@@ -35,7 +35,7 @@ platforms:
   groups: ['db']
   network_mode: bridge
   networks:
-  - name: molecule
+  - name: molecule_config
 
 provisioner:
   name: ansible

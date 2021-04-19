@@ -1,8 +1,10 @@
 ---
 
-- name: systemd daemon-reload
-  systemd:
-    daemon_reload: yes
+- name: Restart ambari-agent
+  service:
+    name: ambari-agent
+    state: restarted
+  become: yes
 
 - name: Restart ambari-server
   service:
@@ -15,8 +17,5 @@
     port: '{{ ambari_port }}'
     host: 0.0.0.0
     delay: 1
-
-- name: Configure DB connection
-  include_tasks: tasks/db_config.yml
 
 ...

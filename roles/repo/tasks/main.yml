@@ -5,6 +5,7 @@
   file:
     name: "{{ ambari_repo.reposdir | d('/etc/yum.repos.d') }}"
     state: directory
+    mode: 0755
 
 - name: Add ambari yum repo
   yum_repository:

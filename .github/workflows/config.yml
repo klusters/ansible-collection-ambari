@@ -1,13 +1,13 @@
 ---
 
-name: "klusters.ambari.server"
+name: "klusters.ambari.config"
 
 on:
   push:
     paths:
-    - 'roles/server/**'
-    - 'molecule/server/**'
-    - '.github/workflows/server.yml'
+    - 'roles/config/**'
+    - 'molecule/config/**'
+    - '.github/workflows/config.yml'
     - 'molecule/common/**'
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
         molecule_distro:
         - {'distro': 'centos:7', 'command': '/usr/sbin/init'}
         collection_role:
-        - server
+        - config
 
     steps:
     - name: Git checkout

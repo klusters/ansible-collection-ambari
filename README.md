@@ -10,6 +10,7 @@ Ansible collection that holds roles, that can be used with Ambari Managed Cluste
 |  agent   | ![klusters.ambari.agent](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.agent/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/agent)    |
 |  server   | ![klusters.ambari.server](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.server/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/server)    |
 |  repo   | ![klusters.ambari.repo](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.repo/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/repo)    |
+|  config   | ![klusters.ambari.config](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.config/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/config)    |
 
 ## Usage
 
@@ -46,7 +47,7 @@ To be able to test locally:
 
 For example, on MacOS:
 ```bash
-pip install molecule[docker]
+pip install -r molecule/common/python_requirements.txt
 ```
 
 Each workflow pertains to a single role, and can be launched locally using the following command:

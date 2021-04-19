@@ -3,7 +3,9 @@
 - name: Converge
   hosts: all
 
-  roles:
-  - role: klusters.ambari.agent
+  tasks:
+  - name: Run agent role
+    include_role:
+      name: klusters.ambari.agent
 
 ...

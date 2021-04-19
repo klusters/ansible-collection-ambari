@@ -7,35 +7,35 @@
     name: ambari-server
   notify: systemd daemon-reload
 
-- meta: flush_handlers
+- name: Flush Handlers
+  meta: flush_handlers
 
-- block:
-  - name: Install {{ database }} required packages
-    package:
-      name: "{{ item }}"
-      update_cache: yes
-      state: present
-    with_items: "{{ lookup('vars', database + '_packages') | join(',') }}"
+- name: Install {{ database }} required packages
+  package:
+    name: "{{ lookup('vars', database + '_packages') | join(',') }}"
+    update_cache: yes
+    state: present
 
-- block:
-  - name: Load the Ambari Server schema (postgres)
-    postgresql_db:
-      name: "{{ database_options.ambari_db_name }}"
-      maintenance_db: "{{ database_options.ambari_db_name }}"
-      login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
-      port: "{{ postgres_port }}"
-      login_user: "{{ database_options.ambari_db_username }}"
-      login_password: "{{ database_options.ambari_db_password }}"
-      state: restore
-      target: /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
-    register: import_results
+- name: If Postgres, load schema
+  postgresql_db:
+    name: "{{ database_options.ambari_db_name }}"
+    maintenance_db: "{{ database_options.ambari_db_name }}"
+    login_host: "{{ database_options.external_hostname|default(ansible_fqdn) }}"
+    port: "{{ postgres_port }}"
+    login_user: "{{ database_options.ambari_db_username }}"
+    login_password: "{{ database_options.ambari_db_password }}"
+    state: restore
+    target: /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+  register: import_results
   when: database == "postgres"
+  notify: 'Configure DB connection'
 
-- block:
+- name: If MySQL, load schema 
+  block:
   - name: Load the Ambari Server schema (mysql)
     mysql_db:
       name: "{{ database_options.ambari_db_name }}"
-      login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
+      login_host: "{{ database_options.external_hostname|default(ansible_fqdn) }}"
       login_port: "{{ mysql_port }}"
       login_user: "{{ database_options.ambari_db_username }}"
       login_password: "{{ database_options.ambari_db_password }}"
@@ -43,6 +43,7 @@
       target: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
     register: import_results
     ignore_errors: true
+    notify: 'Configure DB connection'
 
   - name: Fail if the mysql schema could not be loaded
     fail:
@@ -51,36 +52,18 @@
 
   when: database == "mysql" or database == "mariadb"
 
-- name: Configure the Ambari JDBC driver
-  shell: /usr/sbin/ambari-server setup --jdbc-db={{ database | regex_replace('mariadb', 'mysql') }} --jdbc-driver={{ lookup('vars', database + '_jdbc_location') }}
-  notify: Restart ambari-server
-  when: import_results.changed | bool
+- name: Flush Handlers
+  meta: flush_handlers
 
-- name: Set the Ambari Server database setup options
-  set_fact:
-    ambari_database_options: "--database={{ database | regex_replace('mariadb', 'mysql') }} \
-                              --databasehost={{ database_options.external_hostname|default(ansible_fqdn,true) }} \
-                              --databaseport={{ lookup('vars', database | regex_replace('mariadb', 'mysql') + '_port') }} \
-                              --databasename={{ database_options.ambari_db_name }} \
-                              --databaseusername={{ database_options.ambari_db_username }} \
-                              --databasepassword={{ database_options.ambari_db_password }}"
-
-- name: Set the Ambari Server Java setup option
-  set_fact:
-    ambari_java_options: "-j {{ java_path }}"
-
-- name: Run Ambari Server setup
-  shell: /usr/sbin/ambari-server setup -s {{ ambari_java_options|default("") }} {{ ambari_database_options|default("") }}
-  notify: Restart ambari-server
-  when: import_results.changed | bool
-
-- name: Run Ambari Server setup security https
-  shell: /usr/sbin/ambari-server setup-security \
-    --security-option=setup-https \
-    --api-ssl=true --api-ssl-port={{ ambari_port }} \
-    --import-cert-path={{ ambari_cert }} \
-    --import-key-path={{ ambari_pkey }}  \
-    --pem-password={{ ambari_pkey_password }}
+- name: Enable HTTPS
+  command:
+    argv:
+    - /usr/sbin/ambari-server setup-security
+    - --security-option=setup-https
+    - --api-ssl=true --api-ssl-port={{ ambari_port }}
+    - --import-cert-path={{ ambari_cert }}
+    - --import-key-path={{ ambari_pkey }}
+    - --pem-password={{ ambari_pkey_password }}
   notify: Restart ambari-server
   when:  ambari_https | bool
 
@@ -96,7 +79,8 @@
   include: logs.yml
   when: config_logs | bool
 
-- meta: flush_handlers
+- name: Flush Handlers
+  meta: flush_handlers
 
 - name: Make sure the ambari-server service is started and enabled
   service:
