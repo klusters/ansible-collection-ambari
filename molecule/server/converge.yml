@@ -7,7 +7,9 @@
   hosts: ambari_server
   gather_facts: no
 
-  roles:
-  - role: klusters.ambari.server
+  tasks:
+  - name: Run server role
+    include_role:
+      name: klusters.ambari.server
 
 ...

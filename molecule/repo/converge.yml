@@ -3,7 +3,9 @@
 - name: Converge
   hosts: all
 
-  roles:
-  - role: klusters.ambari.repo
+  tasks:
+  - name: Run repo role
+    include_role:
+      name: klusters.ambari.repo
 
 ...

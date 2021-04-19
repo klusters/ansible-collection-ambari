@@ -1,6 +1,6 @@
 ---
 
-- name: Prepare
+- name: Set Up environment to be able to run klusters.ambari.config role
   hosts: ambari_server
   gather_facts: no
 
@@ -9,12 +9,20 @@
     package:
       name: java-1.8.0-openjdk-devel
 
-  vars:
-    ambari_server: "{{ groups['ambari_server'] | first }}"
+  tasks:
+  - name: Install & Configure Ambari agent & server
+    include_role:
+      name: '{{ loop_actual_role }}'
 
-  roles:
-  - role: klusters.ambari.repo
-  - role: klusters.ambari.agent
-  - role: klusters.ambari.server
+    vars:
+      ambari_server: "{{ groups['ambari_server'] | first }}"
+
+    loop:
+    - klusters.ambari.repo
+    - klusters.ambari.agent
+    - klusters.ambari.server
+    
+    loop_control:
+      loop_var: loop_actual_role
 
 ...
