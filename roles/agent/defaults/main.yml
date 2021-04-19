@@ -1,8 +1,8 @@
 ---
 
 ambari_server: localhost
-base_logs_path: /var/log
 
 config_logs: no
+base_logs_path: /var/log
 
 ...

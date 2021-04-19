@@ -1,7 +1,6 @@
 ---
 
 ambari_server: localhost
-base_logs_path: /var/log
 
 java_path: '/usr/lib/jvm/java'
 
@@ -9,6 +8,7 @@ ambari_https: no
 ambari_port: 8080
 
 config_logs: no
+base_logs_path: /var/log
 
 postgres_port: 5432
 postgres_jdbc_location: /usr/share/java/postgresql-jdbc.jar
