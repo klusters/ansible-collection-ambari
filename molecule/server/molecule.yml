@@ -6,12 +6,12 @@ dependency:
 driver:
   name: docker
 
-# lint: |
-#   yamllint roles
-#   ansible-lint roles
+lint: |
+  yamllint roles
+  ansible-lint roles
 
 platforms:
-- name: server
+- name: server_server
   image: ${MOLECULE_DISTRO:-centos:7}
   volumes:
   - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -22,9 +22,9 @@ platforms:
   networks:
   - name: molecule
     links:
-    - mariadb:db
+    - server_mariadb:db
 
-- name: mariadb
+- name: server_mariadb
   image: mariadb:10.2
   env:
     MYSQL_ROOT_PASSWORD: molecule
