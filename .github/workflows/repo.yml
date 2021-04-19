@@ -10,9 +10,6 @@ on:
     - '.github/workflows/repo.yml'
     - 'molecule/common/**'
 
-    tags-ignore:
-    - '*.*'
-
 jobs:
   molecule:
     runs-on: ubuntu-latest
