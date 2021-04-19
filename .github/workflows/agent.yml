@@ -4,14 +4,6 @@ name: "klusters.ambari.agent"
 
 on:
   push:
-    paths:
-    - 'roles/agent/**'
-    - 'molecule/agent/**'
-    - '.github/workflows/agent.yml'
-    - 'molecule/common/**'
-
-    tags-ignore:
-    - '*.*'
 
 jobs:
   molecule:

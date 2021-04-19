@@ -4,14 +4,6 @@ name: "klusters.ambari.server"
 
 on:
   push:
-    paths:
-    - 'roles/server/**'
-    - 'molecule/server/**'
-    - '.github/workflows/server.yml'
-    - 'molecule/common/**'
-
-    tags-ignore:
-    - '*.*'
 
 jobs:
   molecule:
