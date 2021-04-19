@@ -16,20 +16,19 @@
     update_cache: yes
     state: present
 
-- name: If Postgres, load schema 
-  block:
-  - name: Load the Ambari Server schema (postgres)
-    postgresql_db:
-      name: "{{ database_options.ambari_db_name }}"
-      maintenance_db: "{{ database_options.ambari_db_name }}"
-      login_host: "{{ database_options.external_hostname|default(ansible_fqdn) }}"
-      port: "{{ postgres_port }}"
-      login_user: "{{ database_options.ambari_db_username }}"
-      login_password: "{{ database_options.ambari_db_password }}"
-      state: restore
-      target: /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
-    register: import_results
+- name: If Postgres, load schema
+  postgresql_db:
+    name: "{{ database_options.ambari_db_name }}"
+    maintenance_db: "{{ database_options.ambari_db_name }}"
+    login_host: "{{ database_options.external_hostname|default(ansible_fqdn) }}"
+    port: "{{ postgres_port }}"
+    login_user: "{{ database_options.ambari_db_username }}"
+    login_password: "{{ database_options.ambari_db_password }}"
+    state: restore
+    target: /var/lib/ambari-server/resources/Ambari-DDL-Postgres-CREATE.sql
+  register: import_results
   when: database == "postgres"
+  notify: 'Configure DB connection'
 
 - name: If MySQL, load schema 
   block:
@@ -44,6 +43,7 @@
       target: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
     register: import_results
     ignore_errors: true
+    notify: 'Configure DB connection'
 
   - name: Fail if the mysql schema could not be loaded
     fail:
@@ -51,6 +51,9 @@
     when: import_results is failed and not import_results.msg is search("Table .* already exists")
 
   when: database == "mysql" or database == "mariadb"
+
+- name: Flush Handlers
+  meta: flush_handlers
 
 - name: Enable HTTPS
   command:
