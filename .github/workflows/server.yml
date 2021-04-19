@@ -9,12 +9,10 @@ on:
     - 'molecule/server/**'
     - '.github/workflows/server.yml'
     - 'molecule/common/**'
+    - '!**/*.md'
 
     tags-ignore:
     - '*.*'
-
-    paths-ignore:
-    - '**/*.md'
 
 jobs:
   molecule:
