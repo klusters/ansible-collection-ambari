@@ -47,7 +47,7 @@ To be able to test locally:
 
 For example, on MacOS:
 ```bash
-pip install molecule[docker]
+pip install -r molecule/common/python_requirements.txt
 ```
 
 Each workflow pertains to a single role, and can be launched locally using the following command:

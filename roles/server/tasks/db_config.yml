@@ -13,10 +13,12 @@
 - name: Configure the Ambari JDBC driver
   command:
     cmd: /usr/sbin/ambari-server setup --jdbc-db={{ database | regex_replace('mariadb', 'mysql') }} --jdbc-driver={{ lookup('vars', database + '_jdbc_location') }}
+  changed_when: no
 
 - name: Configure Ambari DB connection
   command:
     cmd: /usr/sbin/ambari-server setup -s {{ ambari_java_options|default("") }} {{ ambari_database_options|default("") }}
   notify: Restart ambari-server
+  changed_when: no
 
 ...
