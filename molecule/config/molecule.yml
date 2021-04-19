@@ -17,7 +17,7 @@ platforms:
   - /sys/fs/cgroup:/sys/fs/cgroup:ro
   privileged: yes
   command: ${MOLECULE_COMMAND:-"/usr/sbin/init"}
-  groups: ['ambari_server']
+  groups: ['ambari_server', 'ambari_agent']
   network_mode: bridge
   networks:
   - name: molecule

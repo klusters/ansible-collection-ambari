@@ -13,8 +13,6 @@ Role Variables
 --------------
 
 ```yaml
-ambari_server: localhost
-
 java_path: '/usr/lib/jvm/java'
 
 ambari_https: no

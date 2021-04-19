@@ -78,7 +78,7 @@
     headers: '{"X-Requested-By":"ambari"}'
     status_code: 200,201,202,404
     return_content: no
-  with_items: "{{ groups['ambari-agent'] }}"
+  with_items: "{{ groups['ambari_agent'] }}"
   register: result
   until: "result.status != 404"
   retries: 100

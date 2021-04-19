@@ -9,8 +9,12 @@
     package:
       name: java-1.8.0-openjdk-devel
 
+  vars:
+    ambari_server: "{{ groups['ambari_server'] | first }}"
+
   roles:
   - role: klusters.ambari.repo
+  - role: klusters.ambari.agent
   - role: klusters.ambari.server
 
 ...

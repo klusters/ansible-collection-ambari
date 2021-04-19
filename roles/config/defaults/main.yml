@@ -1,6 +1,6 @@
 ---
 
-ambari_server: "{{ groups['ambari_server'] | first }}"
+ambari_server: localhost
 
 hdp_version: 3.1.4.0
 hdp_build_number: 315
