@@ -10,9 +10,6 @@ on:
     - '.github/workflows/agent.yml'
     - 'molecule/common/**'
 
-    tags-ignore:
-    - '*.*'
-
 jobs:
   molecule:
     runs-on: ubuntu-latest
@@ -54,8 +51,8 @@ jobs:
     - name: Install python packages
       working-directory: ansible_collections/klusters/ambari
       run: |
-        (test -f molecule/${{ matrix.collection_role }}/python_requirements.txt) && pip install --upgrade --upgrade-strategy eager -r molecule/${{ matrix.collection_role }}/python_requirements.txt
-        (test -f molecule/common/python_requirements.txt) && pip install --upgrade --upgrade-strategy eager -r molecule/common/python_requirements.txt
+        (test -f molecule/${{ matrix.collection_role }}/python_requirements.txt) && pip install --upgrade --upgrade-strategy eager -r molecule/${{ matrix.collection_role }}/python_requirements.txt ) ||
+        (test -f molecule/common/python_requirements.txt && pip install --upgrade --upgrade-strategy eager -r molecule/common/python_requirements.txt )
 
     - name: Run tests
       working-directory: ansible_collections/klusters/ambari
