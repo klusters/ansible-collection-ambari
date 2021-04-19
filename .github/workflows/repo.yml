@@ -4,6 +4,14 @@ name: "klusters.ambari.repo"
 
 on:
   push:
+    paths:
+    - 'roles/repo/**'
+    - 'molecule/repo/**'
+    - '.github/workflows/repo.yml'
+    - 'molecule/common/**'
+
+    tags-ignore:
+    - '*.*'
 
 jobs:
   molecule:
