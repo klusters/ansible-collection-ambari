@@ -21,7 +21,7 @@ jobs:
       PY_COLORS: 1
       MOLECULE_DISTRO: ${{ matrix.molecule_distro.distro }}
       MOLECULE_COMMAND: ${{ matrix.molecule_distro.command }}
-      
+
       AMBARI_YUM_URL: ${{ secrets.AMBARI_YUM_URL }}
       AMBARI_YUM_USERNAME: ${{ secrets.AMBARI_YUM_USERNAME }}
       AMBARI_YUM_PASSWORD: ${{ secrets.AMBARI_YUM_PASSWORD }}
@@ -61,3 +61,5 @@ jobs:
       working-directory: ansible_collections/klusters/ambari
       run: |
         molecule test -s ${{ matrix.collection_role }}
+
+...

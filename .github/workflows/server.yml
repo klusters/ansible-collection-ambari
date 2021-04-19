@@ -25,14 +25,14 @@ jobs:
       AMBARI_YUM_URL: ${{ secrets.AMBARI_YUM_URL }}
       AMBARI_YUM_USERNAME: ${{ secrets.AMBARI_YUM_USERNAME }}
       AMBARI_YUM_PASSWORD: ${{ secrets.AMBARI_YUM_PASSWORD }}
-
+      
     strategy:
       fail-fast: true
       matrix:
         molecule_distro:
-          - { "distro":"centos:7", "command":"/usr/sbin/init" }
+        - {'distro': 'centos:7', 'command': '/usr/sbin/init'}
         collection_role:
-          - server
+        - server
 
     steps:
     - name: Git checkout
@@ -54,9 +54,12 @@ jobs:
     - name: Install python packages
       working-directory: ansible_collections/klusters/ambari
       run: |
-        pip install --upgrade --upgrade-strategy eager -r molecule/${{ matrix.collection_role }}/python_requirements.txt
+        (test -f molecule/${{ matrix.collection_role }}/python_requirements.txt) && pip install --upgrade --upgrade-strategy eager -r molecule/${{ matrix.collection_role }}/python_requirements.txt
+        (test -f molecule/common/python_requirements.txt) && pip install --upgrade --upgrade-strategy eager -r molecule/common/python_requirements.txt
 
     - name: Run tests
       working-directory: ansible_collections/klusters/ambari
       run: |
         molecule test -s ${{ matrix.collection_role }}
+
+...
