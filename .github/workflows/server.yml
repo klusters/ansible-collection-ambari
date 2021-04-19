@@ -17,9 +17,6 @@ jobs:
   molecule:
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: true
-
     env:
       PY_COLORS: 1
       MOLECULE_DISTRO: ${{ matrix.molecule_distro.distro }}
@@ -29,11 +26,13 @@ jobs:
       AMBARI_YUM_USERNAME: ${{ secrets.AMBARI_YUM_USERNAME }}
       AMBARI_YUM_PASSWORD: ${{ secrets.AMBARI_YUM_PASSWORD }}
 
+    strategy:
+      fail-fast: true
       matrix:
         molecule_distro:
-        - { "distro":"centos:7", "command":"/usr/sbin/init" }
+          - { "distro":"centos:7", "command":"/usr/sbin/init" }
         collection_role:
-        - server
+          - server
 
     steps:
     - name: Git checkout
