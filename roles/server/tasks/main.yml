@@ -7,22 +7,22 @@
     name: ambari-server
   notify: systemd daemon-reload
 
-- meta: flush_handlers
+- name: Flush Handlers
+  meta: flush_handlers
 
-- block:
-  - name: Install {{ database }} required packages
-    package:
-      name: "{{ item }}"
-      update_cache: yes
-      state: present
-    with_items: "{{ lookup('vars', database + '_packages') | join(',') }}"
+- name: Install {{ database }} required packages
+  package:
+    name: "{{ lookup('vars', database + '_packages') | join(',') }}"
+    update_cache: yes
+    state: present
 
-- block:
+- name: If Postgres, load schema 
+  block:
   - name: Load the Ambari Server schema (postgres)
     postgresql_db:
       name: "{{ database_options.ambari_db_name }}"
       maintenance_db: "{{ database_options.ambari_db_name }}"
-      login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
+      login_host: "{{ database_options.external_hostname|default(ansible_fqdn) }}"
       port: "{{ postgres_port }}"
       login_user: "{{ database_options.ambari_db_username }}"
       login_password: "{{ database_options.ambari_db_password }}"
@@ -31,11 +31,12 @@
     register: import_results
   when: database == "postgres"
 
-- block:
+- name: If MySQL, load schema 
+  block:
   - name: Load the Ambari Server schema (mysql)
     mysql_db:
       name: "{{ database_options.ambari_db_name }}"
-      login_host: "{{ database_options.external_hostname|default(ansible_fqdn,true) }}"
+      login_host: "{{ database_options.external_hostname|default(ansible_fqdn) }}"
       login_port: "{{ mysql_port }}"
       login_user: "{{ database_options.ambari_db_username }}"
       login_password: "{{ database_options.ambari_db_password }}"
@@ -60,9 +61,6 @@
     - --import-cert-path={{ ambari_cert }}
     - --import-key-path={{ ambari_pkey }}
     - --pem-password={{ ambari_pkey_password }}
-- name: Set the Ambari Server Java setup option
-  set_fact:
-    ambari_java_options: "-j {{ java_path }}"
   notify: Restart ambari-server
   when:  ambari_https | bool
 
@@ -78,7 +76,8 @@
   include: logs.yml
   when: config_logs | bool
 
-- meta: flush_handlers
+- name: Flush Handlers
+  meta: flush_handlers
 
 - name: Make sure the ambari-server service is started and enabled
   service:

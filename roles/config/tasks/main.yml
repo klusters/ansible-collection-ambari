@@ -17,7 +17,7 @@
     user: "{{ ambari_admin_user }}"
     password: "{{ ambari_admin_default_password }}"
     headers: '{"X-Requested-By":"ambari"}'
-    body: " {\"Users\":{ \"password\":\"{{ ambari_admin_password }}\", \"old_password\":\"{{ ambari_admin_default_password }}\"}}"
+    body: "{\"Users\":{ \"password\":\"{{ ambari_admin_password }}\", \"old_password\":\"{{ ambari_admin_default_password }}\" }}"
     body_format: raw
     status_code: 200,201,202,403
     return_content: no
@@ -60,13 +60,15 @@
     user: "{{ ambari_admin_user }}"
     password: "{{ ambari_admin_password }}"
     headers: '{"X-Requested-By":"ambari"}'
-    body: " {\"VersionDefinition\":{ \"version_url\":\"file:/tmp/cluster_vdf.xml\"}}"
+    body: " {\"VersionDefinition\":{ \"version_url\":\"file:/tmp/cluster_vdf.xml\" }}"
     body_format: raw
     status_code: 200,201,202
     return_content: no
   when: (existing_vdf.content|from_yaml)['items'] | length == 0
 
-- meta: flush_handlers
+
+- name: Flush Handlers
+  meta: flush_handlers
 
 - name: Make sure all of the Ambari Agents have registered
   uri:

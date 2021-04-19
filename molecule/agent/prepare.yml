@@ -3,7 +3,9 @@
 - name: Prepare
   hosts: all
 
-  roles:
-  - role: klusters.ambari.repo
+  tasks:
+  - name: Configure yum repo for ambari packages
+    include_role:
+      name: klusters.ambari.repo
 
 ...

@@ -5,6 +5,7 @@
   file:
     path: '{{ base_logs_path }}/ambari-agent'
     state: directory
+    mode: 0755
 
 - name: Configure logs dir in ambari-agent.ini
   become: yes

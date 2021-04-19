@@ -5,6 +5,7 @@
   file:
     path: '{{ base_logs_path }}/ambari-server'
     state: directory
+    mode: 0755
 
 - name: Configure logs dir in ambari-server.log4j
   become: yes
