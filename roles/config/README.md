@@ -37,8 +37,8 @@ ambari_admin_password: 'newpassword'
 ambari_admin_default_password: 'admin'
 
 os_family: "redhat7"
-hdp_main_repo_url: "{{ repo_base_url }}/HDP/{{ hdp_version }}"
-utils_repo_url: "{{ repo_base_url }}/HDP-UTILS/{{ utils_version }}"
+hdp_main_repo_url: "{{ yum_baseurl }}/HDP/{{ hdp_version }}"
+utils_repo_url: "{{ yum_baseurl }}/HDP-UTILS/{{ utils_version }}"
 ```
 
 Example Playbook
