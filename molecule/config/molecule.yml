@@ -7,8 +7,8 @@ driver:
   name: docker
 
 lint: |
-  yamllint roles
-  ansible-lint roles
+  yamllint roles/config
+  ansible-lint roles/config
 
 platforms:
 - name: config_server

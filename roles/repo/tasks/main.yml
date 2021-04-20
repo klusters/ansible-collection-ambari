@@ -16,5 +16,5 @@
     gpgcheck: '{{ ambari_repo.gpgcheck | d(omit ) }}'
     username: '{{ ambari_repo.username | d(omit ) }}'
     password: '{{ ambari_repo.password | d(omit ) }}'
-
+    gpgkey: '{{ ambari_repo.gpgkey | d(omit ) }}'
 ...
