@@ -11,6 +11,7 @@ Ansible collection that holds roles, that can be used with Ambari Managed Cluste
 |  server   | ![klusters.ambari.server](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.server/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/server)    |
 |  repo   | ![klusters.ambari.repo](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.repo/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/repo)    |
 |  config   | ![klusters.ambari.config](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.config/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/config)    |
+|  blueprint   | ![klusters.ambari.blueprint](https://github.com/klusters/ansible-collection-ambari/workflows/klusters.ambari.blueprint/badge.svg)          | [Documentation](https://github.com/klusters/ansible-collection-ambari/tree/main/roles/blueprint)    |
 
 ## Usage
 
