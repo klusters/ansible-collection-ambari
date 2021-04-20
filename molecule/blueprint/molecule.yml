@@ -7,24 +7,24 @@ driver:
   name: docker
 
 lint: |
-  yamllint roles/server
-  ansible-lint roles/server
+  yamllint roles/blueprint
+  ansible-lint roles/blueprint
 
 platforms:
-- name: server_server
+- name: blueprint_server
   image: ${MOLECULE_DISTRO:-centos:7}
   volumes:
   - /sys/fs/cgroup:/sys/fs/cgroup:ro
   privileged: yes
   command: ${MOLECULE_COMMAND:-"/usr/sbin/init"}
-  groups: ['ambari_server']
+  groups: ['ambari_server', 'ambari_agent']
   network_mode: bridge
   networks:
-  - name: molecule
+  - name: molecule_blueprint
     links:
-    - server_mariadb:db
+    - blueprint_mariadb:db
 
-- name: server_mariadb
+- name: blueprint_mariadb
   image: mariadb:10.2
   env:
     MYSQL_ROOT_PASSWORD: molecule
@@ -35,7 +35,7 @@ platforms:
   groups: ['db']
   network_mode: bridge
   networks:
-  - name: molecule
+  - name: molecule_blueprint
 
 provisioner:
   name: ansible

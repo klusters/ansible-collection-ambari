@@ -1,0 +1,20 @@
+---
+
+ambari_server: localhost
+ambari_port: 8080
+
+blueprint_name: molecule
+cluster_name: molecule
+
+hdp_version: 3.1.4.0
+
+cluster_template: "{{ lookup('file', 'cluster_template.json') }}"
+cluster_blueprint: "{{ lookup('file', 'cluster_blueprint.json') }}"
+
+ambari_admin_user: admin
+ambari_admin_password: newpassword
+
+wait: yes
+wait_timeout: 5
+
+...
