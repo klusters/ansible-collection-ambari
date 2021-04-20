@@ -42,4 +42,20 @@ provisioner:
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
 
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence # asking to create the same cluster twice should fail
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
+
 ...

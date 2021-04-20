@@ -2,7 +2,6 @@
 
 - name: Set Up environment to be able to run klusters.ambari.config role
   hosts: ambari_server
-  gather_facts: no
 
   pre_tasks:
   - name: Install OpenJDK
