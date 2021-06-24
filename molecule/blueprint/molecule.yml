@@ -11,7 +11,7 @@ lint: |
   ansible-lint roles/blueprint
 
 platforms:
-- name: blueprint_server
+- name: blueprint-server
   image: ${MOLECULE_DISTRO:-centos:7}
   volumes:
   - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -20,11 +20,11 @@ platforms:
   groups: ['ambari_server', 'ambari_agent']
   network_mode: bridge
   networks:
-  - name: molecule_blueprint
+  - name: molecule-blueprint
     links:
-    - blueprint_mariadb:db
+    - blueprint-mariadb:db
 
-- name: blueprint_mariadb
+- name: blueprint-mariadb
   image: mariadb:10.2
   env:
     MYSQL_ROOT_PASSWORD: molecule
@@ -35,7 +35,7 @@ platforms:
   groups: ['db']
   network_mode: bridge
   networks:
-  - name: molecule_blueprint
+  - name: molecule-blueprint
 
 provisioner:
   name: ansible

@@ -20,11 +20,11 @@ platforms:
   groups: ['ambari_server', 'ambari_agent']
   network_mode: bridge
   networks:
-  - name: molecule_config
+  - name: molecule-config
     links:
-    - config_mariadb:db
+    - config-mariadb:db
 
-- name: config_mariadb
+- name: config-mariadb
   image: mariadb:10.2
   env:
     MYSQL_ROOT_PASSWORD: molecule
@@ -35,7 +35,7 @@ platforms:
   groups: ['db']
   network_mode: bridge
   networks:
-  - name: molecule_config
+  - name: molecule-config
 
 provisioner:
   name: ansible
