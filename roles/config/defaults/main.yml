@@ -16,8 +16,8 @@ hdf_install: false
 install_hdpsearch: false
 
 yum_baseurl: "{{ lookup('env', 'YUM_BASEURL') }}"
-yum_username: "{{ lookup('env', 'YUM_PASSWORD') }}"
-yum_password: "{{ lookup('env', 'YUM_USERNAME') }}"
+yum_username: "{{ lookup('env', 'YUM_USERNAME') }}"
+yum_password: "{{ lookup('env', 'YUM_PASSWORD') }}"
 
 ambari_admin_user: 'admin'
 ambari_admin_password: 'newpassword'

@@ -6,7 +6,7 @@ ambari_repo:
   file: ambari
   gpgcheck: no
   baseurl: "{{ lookup('env', 'YUM_BASEURL') }}/ambari/2.7.4.0-118"
-  username: "{{ lookup('env', 'YUM_PASSWORD') }}"
-  password: "{{ lookup('env', 'YUM_USERNAME') }}"
+  username: "{{ lookup('env', 'YUM_USERNAME') }}"
+  password: "{{ lookup('env', 'YUM_PASSWORD') }}"
 
 ...

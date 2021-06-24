@@ -11,17 +11,17 @@ base_logs_path: /var/log
 postgres_port: 5432
 postgres_jdbc_location: /usr/share/java/postgresql-jdbc.jar
 postgres_packages:
-  - postgresql
-  - python-psycopg2
-  - postgresql-jdbc
+- postgresql
+- python-psycopg2
+- postgresql-jdbc
 
 database: mariadb
 mysql_port: 3306
 mariadb_jdbc_location: /usr/share/java/mysql-connector-java.jar
 mariadb_packages:
-  - mysql
-  - MySQL-python
-  - mysql-connector-java
+- mysql
+- MySQL-python
+- mysql-connector-java
 
 database_options:
   external_hostname: "{{ groups['db'] | first }}"
