@@ -5,7 +5,7 @@ ambari_repo:
   description: 'Ambari v2.7.4.0 yum repository'
   file: ambari
   gpgcheck: no
-  baseurl: "{{ lookup('env', 'YUM_BASEURL') }}/ambari/2.7.4.0-118"
+  baseurl: "{{ lookup('env', 'YUM_BASEURL') }}/ambari"
   username: "{{ lookup('env', 'YUM_USERNAME') }}"
   password: "{{ lookup('env', 'YUM_PASSWORD') }}"
 
